@@ -43,25 +43,33 @@ public class JDBCVenueDAO implements VenueDAO {
     }
 
     @Override
-    public Venue retrieveVenueDetails() {
+    public List<String>  retrieveVenueDetails() {
         Venue venue = null;
-       String sql =  "SELECT venue.name, venue.description, city.name, city.state_abbreviation, category.name " + "FROM venue " +
+       String sql =  "SELECT venue.name, venue.description, city.name, city.state_abbreviation, category.name AS details " + "FROM venue " +
 
         "JOIN category_venue ON category_venue.venue_id = venue.id " +
 
         "JOIN category ON category.id = category_venue.category_id " +
                "JOIN city ON city.id = venue.city_id " +
-               "WHERE city_id = ? AND venue_id = ?;";
+               "WHERE city_id = 1 AND venue_id = 1;";
 
        
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 
-        if (results.next()) {
+        List<String> venueDetails = new ArrayList<>();
+
+        while (results.next()) {
+
+
 
             venue = mapRowToVenue(results);
 
-            return venue;
+            String details = venue.getName() + " " + venue.getDescription() + " " + venue.getCityName()+ " " + venue.getStateName();
+            venueDetails.add(details);
+
+
+            return venueDetails;
 
 
 
