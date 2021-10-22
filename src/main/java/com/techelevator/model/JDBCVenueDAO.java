@@ -53,7 +53,7 @@ public class JDBCVenueDAO implements VenueDAO {
                "JOIN city ON city.id = venue.city_id " +
                "WHERE city_id = ? AND venue_id = ?;";
 
-       
+
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 
