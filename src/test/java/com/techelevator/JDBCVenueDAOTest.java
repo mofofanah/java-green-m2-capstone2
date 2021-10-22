@@ -1,6 +1,7 @@
 package com.techelevator;
 
 import com.techelevator.model.JDBCVenueDAO;
+import com.techelevator.model.Venue;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -45,6 +46,12 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
         //Act
         List<String> allVenueNames = dao.retrieveAllVenues(); //method under test
         //Assert
+
+       Venue venue = dao.retrieveVenueDetails();
+
+
+
+
         assertNotNull(allVenueNames);
          if (allVenueNamesBeforeInsert.size() + 2 == allVenueNames.size()) {
 
@@ -54,11 +61,10 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
              assertTrue(false);
          }
 
-         assertEquals("XYZZY", allVenueNames.get(15));
-
-         assertEquals("ZZZZZ", allVenueNames.get(16));
 
     }
+
+
 
 
 
@@ -73,5 +79,7 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
             throw new RuntimeException("Something went wrong while getting an id for the new Venue");
         }
     }
+
+
 
 }

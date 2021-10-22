@@ -21,15 +21,16 @@ public class JDBCVenueDAO implements VenueDAO {
         List<String> venueNames = new ArrayList<>();
         //List<Venue> venues = new ArrayList<>();
 
-        String sql = "SELECT * " + "FROM venue;";
+        String sql = "SELECT * " + "FROM venue " + "ORDER BY name;";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        int count = 1;
 
         while (results.next()) {
             //take the items out of the results and put into a home object
             Venue venue = mapRowToVenue(results);
             //add home object to our list
-            venueNames.add(venue.getName());
+            venueNames.add(count++ + ") " + venue.getName());
            // venues.add(venue);
         }
 
@@ -44,11 +45,15 @@ public class JDBCVenueDAO implements VenueDAO {
     @Override
     public Venue retrieveVenueDetails() {
         Venue venue = null;
-       String sql =  "SELECT * " + "FROM venue " +
+       String sql =  "SELECT venue.name, venue.description, city.name, city.state_abbreviation, category.name " + "FROM venue " +
 
         "JOIN category_venue ON category_venue.venue_id = venue.id " +
 
-        "JOIN category ON category.id = category_venue.category_id;";
+        "JOIN category ON category.id = category_venue.category_id " +
+               "JOIN city ON city.id = venue.city_id " +
+               "WHERE city_id = ? AND venue_id = ?;";
+
+       
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 
