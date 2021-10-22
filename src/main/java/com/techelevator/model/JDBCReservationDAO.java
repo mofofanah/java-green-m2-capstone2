@@ -1,5 +1,6 @@
 package com.techelevator.model;
 
+import jdk.vm.ci.meta.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
@@ -24,7 +25,36 @@ public class JDBCReservationDAO implements ReservationDAO{
         List<String> allSpaces = spaceDAO.retrieveVenueSpaceDetails();
         List<String> availableSpaces = new ArrayList<>();
 
-        String sql = "select reservation_id" "from reservation where(?, ?) overlaps ("start_date, end_date) group by reservation_id
+        String sql = "SELECT open_from, open_to, reservation.start_date, reservation.end_date " +
+                "FROM space " + "JOIN reservation ON reservation.space_id = space.id " +
+                "WHERE open_from IS NOT NULL and open_to IS NOT NULL;";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+
+        while (results.next()) {
+
+            Reservation reservation = mapRowToReservation(results);
+
+
+
+
+            LocalDate startDate = LocalDate.of(reservation.getStartDate());
+            LocalDate endDate = reservation.getEndDate();
+            LocalDate userStartDate = LocalDate.of(2021, 10, 19);
+
+
+            if (startDate, endDate, LocalDate.)
+
+        
+
+
+            }
+        }
+
+
+
+
+
 
 
 
@@ -56,5 +86,9 @@ public class JDBCReservationDAO implements ReservationDAO{
         reservation.setReservedFor(results.getString("reserved_for"));
 
         return reservation;
+    }
+
+    public static boolean isOverlapping(re start1, Date end1, Date start2, Date end2) {
+        return start1.before(end2) && start2.before(end1);
     }
 }
