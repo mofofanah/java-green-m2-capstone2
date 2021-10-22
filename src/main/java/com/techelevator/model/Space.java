@@ -67,4 +67,9 @@ public class Space {
     public void setMaxOccupancy(int maxOccupancy) {
         this.maxOccupancy = maxOccupancy;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

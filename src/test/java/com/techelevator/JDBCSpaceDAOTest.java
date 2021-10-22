@@ -10,13 +10,13 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class JDBCSpaceDAOTest extends DAOIntegrationTest{
 
     // dO a @before for test
     private JDBCSpaceDAO dao;
+    private JDBCVenueDAO venueDAO;
     private JdbcTemplate jdbcTemplate;
 
     @Before
@@ -29,39 +29,51 @@ public class JDBCSpaceDAOTest extends DAOIntegrationTest{
     }
 
     @Test
-    public void test_to_see_if_all_venue_names_are_retrieved() {
+    public void test_to_see_if_all_space_details_are_retrieved() {
 
         //insert dummy data into table
         //Arrange
         int nextId = retrieveNextSpaceId();
+        int nextVenueId = retrieveNextVenueId();
+        List<String> allSpaceNamesBeforeInsert = dao.retrieveVenueSpaceDetails();
 
-        List<String> allVenueNamesBeforeInsert = dao.retrieveVenueSpaceDetails();
+
         String venueSQL = "INSERT INTO venue (id, name, city_id, description) " +
                 "VALUES(?, ?, ?, ?)";
-        jdbcTemplate.update(venueSQL, nextId, "XYZZY", 1, "Random Description For Test!");
+        jdbcTemplate.update(venueSQL, nextVenueId , "XYZZY", 1, "Random Description For Test!");
 
-        String venueSQL2 = "INSERT INTO venue (id, name, city_id, description) " +
-                "VALUES(?, ?, ?, ?)";
-        jdbcTemplate.update(venueSQL, nextId + 1, "ZZZZZ", 1, "Random Description For Test Part Two!");
+        String SpaceSQL = "INSERT INTO space (id, venue_id, name, is_accessible, open_from, open_to, daily_rate, max_occupancy) " +
+                "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(SpaceSQL, nextId, nextVenueId , "XYZZY", true, 1, 8, 1800, 100);
+
+       // String SpaceSQL2 = "INSERT INTO space (id, venue_id, name, is_accessible, open_from, open_to, daily_rate, max_occupancy) " +
+        //        "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+      //  jdbcTemplate.update(SpaceSQL2, nextId + 1, nextVenueId,"ZZZZZ", true, 2, 8, 1900, 50);
 
 
         //Act
-        List<String> allVenueNames = dao.retrieveVenueSpaceDetails(); //method under test
-        //Assert
-
-        //Venue venue = dao.retrieveVenueDetails();
+        List<String> allSpaceNames = dao.retrieveVenueSpaceDetails(); //method under test
 
 
 
-
-        assertNotNull(allVenueNames);
-        if (allVenueNamesBeforeInsert.size() + 2 == allVenueNames.size()) {
+        assertNotNull(allSpaceNames);
+        if (allSpaceNamesBeforeInsert.size() + 1 == allSpaceNames.size()) {
 
             assertTrue(true);
         }
         else {
             assertTrue(false);
         }
+        assertEquals("XYZZY true 1 8 1800.00 100", allSpaceNames.get(allSpaceNames.indexOf("XYZZY true 1 8 1800.00 100")));
+
+
+        //to test if results are printing out
+       // for (String spaces : allSpaceNames) {
+         //   System.out.println(spaces);
+      //  }
+
+
+
 
 
 
@@ -75,6 +87,18 @@ public class JDBCSpaceDAOTest extends DAOIntegrationTest{
             throw new RuntimeException("Something went wrong while getting an id for the new Venue");
         }
     }
+
+    private int retrieveNextVenueId () {
+        SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('venue_id_seq')");
+        if (nextIdResult.next()) {
+            return nextIdResult.getInt(1);
+        } else {
+            throw new RuntimeException("Something went wrong while getting an id for the new Venue");
+        }
+    }
+
+
+
 
 
 }
