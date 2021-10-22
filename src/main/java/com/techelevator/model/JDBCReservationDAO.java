@@ -21,26 +21,39 @@ public class JDBCReservationDAO implements ReservationDAO{
     @Override
     public List<String> availableSpaces() {
 
+        String reservationStartDate = "10/12/2021";
+
+
+
         LocalDate reserveDate;
         List<String> allSpaces = spaceDAO.retrieveVenueSpaceDetails();
         List<String> availableSpaces = new ArrayList<>();
 
-        String sql = "SELECT open_from, open_to, reservation.start_date, reservation.end_date " +
-                "FROM space " + "JOIN reservation ON reservation.space_id = space.id " +
-                "WHERE open_from IS NOT NULL and open_to IS NOT NULL;";
+        String availableSpaceSql = "SELECT space.id, space.venue_id, space.name, space.is_accessible, space.open_from, space.open_to, space.daily_rate::money::numeric::float8, space.max_occupancy  FROM space " +
+                "WHERE space.venue_id = ? " +
+                "AND space.id NOT IN (SELECT space.id FROM space " +
+                "LEFT JOIN reservation ON space.id = reservation.space_id " +
+                "WHERE (? <= reservation.end_date " +
+                "AND ? >= reservation.start_date) " +
+                "OR EXTRACT(MONTH FROM CAST(? AS DATE)) < space.open_from " +
+                "OR EXTRACT(MONTH FROM CAST(? AS DATE)) > space.open_to " +
+                "OR space.max_occupancy < ?) " +
+                "ORDER BY space.daily_rate DESC " +
+                "LIMIT 5 ";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(availableSpaceSql);
 
         while (results.next()) {
 
             Reservation reservation = mapRowToReservation(results);
 
 
+            int daysReserved = 5;
 
-
-            LocalDate startDate = LocalDate.of(reservation.getStartDate());
-            LocalDate endDate = reservation.getEndDate();
+            LocalDate startDate = reservation.getStartDate();
+            LocalDate endDate = startDate.plusDays(daysReserved);
             LocalDate userStartDate = LocalDate.of(2021, 10, 19);
+            LocalDate userEndDate =
 
 
             if (startDate, endDate, LocalDate.)
