@@ -27,7 +27,13 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
 
     }
 
-    @Test public void test_to_see_if_all_venue_names_are_retrieved() {
+
+
+
+
+
+    @Test
+    public void test_to_see_if_all_venue_names_are_retrieved() {
 
         //insert dummy data into table
         //Arrange
@@ -47,7 +53,7 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
         List<String> allVenueNames = dao.retrieveAllVenues(); //method under test
         //Assert
 
-       Venue venue = dao.retrieveVenueDetails();
+       //Venue venue = dao.retrieveVenueDetails();
 
 
 
@@ -62,24 +68,28 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
          }
 
 
+
     }
 
+   @Test
+           public void test() {
 
 
+       List<String> venues = dao.retrieveVenueDetails();
+
+       for (String venue : venues) {
+           System.out.println(venue);
+       }
+   }
+
+       private int retrieveNextVenueId () {
+           SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('venue_id_seq')");
+           if (nextIdResult.next()) {
+               return nextIdResult.getInt(1);
+           } else {
+               throw new RuntimeException("Something went wrong while getting an id for the new Venue");
+           }
+       }
 
 
-
-
-
-    private int retrieveNextVenueId() {
-        SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('venue_id_seq')");
-        if(nextIdResult.next()) {
-            return nextIdResult.getInt(1);
-        } else {
-            throw new RuntimeException("Something went wrong while getting an id for the new Venue");
-        }
-    }
-
-
-
-}
+   }
