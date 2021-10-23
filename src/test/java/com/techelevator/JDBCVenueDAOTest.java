@@ -71,16 +71,8 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
 
     }
 
-   @Test
-           public void test() {
 
 
-       List<String> venues = dao.retrieveVenueDetails();
-
-       for (String venue : venues) {
-           System.out.println(venue);
-       }
-   }
 
        private int retrieveNextVenueId () {
            SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('venue_id_seq')");

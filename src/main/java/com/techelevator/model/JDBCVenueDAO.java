@@ -43,7 +43,31 @@ public class JDBCVenueDAO implements VenueDAO {
     }
 
     @Override
-    public List<String>  retrieveVenueDetails() {
+    public Venue retrieveVenueDetailsById(long id) {
+
+        Venue department = null;
+
+        String sql = "SELECT venue.name, venue.description, city.name, city.state_abbreviation, category.name AS details " + "FROM venue " +
+
+                "JOIN category_venue ON category_venue.venue_id = venue.id " +
+
+                "JOIN category ON category.id = category_venue.category_id " +
+                "JOIN city ON city.id = venue.city_id " +
+                "WHERE city_id = 1 AND venue_id = 1;";
+
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);
+
+        if (result.next()) {
+            department = mapRowToVenue(result);
+
+        }
+        return department;
+
+    }
+
+
+/*
+    public int retrieveVenueDetailsByIDTest() {
         Venue venue = null;
        String sql =  "SELECT venue.name, venue.description, city.name, city.state_abbreviation, category.name AS details " + "FROM venue " +
 
@@ -69,7 +93,6 @@ public class JDBCVenueDAO implements VenueDAO {
             venueDetails.add(details);
 
 
-            return venueDetails;
 
 
 
@@ -82,10 +105,8 @@ public class JDBCVenueDAO implements VenueDAO {
 
 
 
-        return null;
     }
-
-
+*/
 
 
 

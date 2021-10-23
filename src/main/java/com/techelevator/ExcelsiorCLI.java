@@ -89,9 +89,27 @@ public class ExcelsiorCLI {
 			List<String> listOfVenues = venueDAO.retrieveAllVenues();
 			menu.printListOfVenues(listOfVenues);
 			String subMenuChoice = menu.printVenueSubMenu();
+			Venue venue = new Venue();
+			//List<String> venueDetails = venueDAO.retrieveVenueDetails();
 
-			//if (subMenuChoice.equalsIgnoreCase()
+			if (subMenuChoice.equalsIgnoreCase("R")) {
+				break;
 
+
+			} else {
+
+				Venue venueDetails = venueDAO.retrieveVenueDetailsById(Long.parseLong(subMenuChoice));
+
+				System.out.println(venueDetails.getId());
+
+
+				{
+
+					menu.printMessage(subMenuChoice + " is not a valid option!");
+
+
+				}
+			}
 		}
 	}
 }
