@@ -3,6 +3,7 @@ package com.techelevator.model;
 import jdk.vm.ci.meta.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import sun.awt.image.IntegerComponentRaster;
 
 import javax.sql.DataSource;
 import java.time.LocalDate;
@@ -21,7 +22,7 @@ public class JDBCReservationDAO implements ReservationDAO{
     @Override
     public List<String> availableSpaces() {
 
-        String reservationStartDate = "10/12/2021";
+
 
 
 
@@ -45,34 +46,29 @@ public class JDBCReservationDAO implements ReservationDAO{
 
         while (results.next()) {
 
+
+            Space spaces = mapRowToSpace(results);
             Reservation reservation = mapRowToReservation(results);
+            String idToString = Long.toString(spaces.getId());
+
+            String availableSpace = idToString + "" + spaces.getName() + "" + spaces.getDailyRate() + "" + spaces.getMaxOccupancy() +
+                    "" + spaces.isAccessible() + "" + 1000;
+            availableSpaces.add(availableSpace);
 
 
-            int daysReserved = 5;
-
-            LocalDate startDate = reservation.getStartDate();
-            LocalDate endDate = startDate.plusDays(daysReserved);
-            LocalDate userStartDate = LocalDate.of(2021, 10, 19);
-            LocalDate userEndDate =
 
 
-            if (startDate, endDate, LocalDate.)
-
-        
 
 
-            }
         }
 
+        return availableSpaces;
 
 
 
 
 
-
-
-        return null;
-    }
+          }
 
     @Override
     public Reservation createReservation(Reservation newReservation) {
@@ -101,7 +97,20 @@ public class JDBCReservationDAO implements ReservationDAO{
         return reservation;
     }
 
-    public static boolean isOverlapping(re start1, Date end1, Date start2, Date end2) {
-        return start1.before(end2) && start2.before(end1);
+    private Space mapRowToSpace(SqlRowSet results) {
+
+        Space space = new Space();
+
+        space.setId(results.getLong("id"));
+        space.setName(results.getString("name"));
+        space.setAccessible(results.getBoolean("is_accessible"));
+        space.setOpenFrom(results.getInt("open_from"));
+        space.setOpenTo(results.getInt("open_to"));
+        space.setDailyRate(results.getBigDecimal("daily_rate"));
+        space.setMaxOccupancy(results.getInt("max_occupancy"));
+
+
+        return space;
     }
+
 }

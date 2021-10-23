@@ -68,9 +68,9 @@ public class JDBCSpaceDAOTest extends DAOIntegrationTest{
 
 
         //to test if results are printing out
-       // for (String spaces : allSpaceNames) {
-         //   System.out.println(spaces);
-      //  }
+        for (String spaces : allSpaceNames) {
+            System.out.println(spaces);
+       }
 
 
 
