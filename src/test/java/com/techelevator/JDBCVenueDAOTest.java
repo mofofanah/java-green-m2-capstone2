@@ -71,6 +71,25 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
 
     }
 
+    @Test
+
+    public void to_see_if_venue_details_are_retrieved () {
+
+        int nextId = retrieveNextVenueId();
+
+
+        String venueSQL = "INSERT INTO venue (id, name, city_id, description) " +
+                "VALUES(?, ?, ?, ?)";
+        jdbcTemplate.update(venueSQL, nextId, "XYZZY", 1, "Random Description For Test!");
+
+        String venueSQL2 = "INSERT INTO venue (id, name, city_id, description) " +
+                "VALUES(?, ?, ?, ?)";
+        jdbcTemplate.update(venueSQL, nextId + 1, "ZZZZZ", 1, "Random Description For Test Part Two!");
+
+
+
+    }
+
 
 
 

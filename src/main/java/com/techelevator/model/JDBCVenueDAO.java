@@ -21,7 +21,13 @@ public class JDBCVenueDAO implements VenueDAO {
         List<String> venueNames = new ArrayList<>();
         //List<Venue> venues = new ArrayList<>();
 
-        String sql = "SELECT * " + "FROM venue " + "ORDER BY name;";
+        String sql = "select venue.id, venue.name, city.name as city, state_abbreviation, description, string_agg(category.name, ', ') as categories " +
+                "from venue " +
+                "join city on venue.city_id = city.id " +
+                "left join category_venue on venue.id = category_venue.venue_id " +
+                "left join category on category_venue.category_id = category.id " +
+                "group by venue.id, city.name, city.state_abbreviation " +
+                "order by venue.name";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
         int count = 1;
@@ -45,23 +51,23 @@ public class JDBCVenueDAO implements VenueDAO {
     @Override
     public Venue retrieveVenueDetailsById(long id) {
 
-        Venue department = null;
+        Venue venue = null;
 
-        String sql = "SELECT venue.name, venue.description, city.name, city.state_abbreviation, category.name AS details " + "FROM venue " +
-
-                "JOIN category_venue ON category_venue.venue_id = venue.id " +
-
-                "JOIN category ON category.id = category_venue.category_id " +
-                "JOIN city ON city.id = venue.city_id " +
-                "WHERE city_id = 1 AND venue_id = 1;";
+        String sql = "select venue.id, venue.name, city.name as city, state_abbreviation, description, string_agg(category.name, ', ') as categories " +
+                "from venue " +
+                "join city on venue.city_id = city.id " +
+                "left join category_venue on venue.id = category_venue.venue_id " +
+                "left join category on category_venue.category_id = category.id " +
+                "where venue.id = ? " +
+                "group by venue.id, city.name, city.state_abbreviation;";
 
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);
 
         if (result.next()) {
-            department = mapRowToVenue(result);
+            venue = mapRowToVenue(result);
 
         }
-        return department;
+        return venue;
 
     }
 
@@ -118,7 +124,13 @@ public class JDBCVenueDAO implements VenueDAO {
         venue.setId(results.getLong("id"));
         venue.setName(results.getString("name"));
         venue.setDescription(results.getString("description"));
-        venue.setCityName(results.getString("city_id"));
+        venue.setCityName(results.getString("city"));
+        venue.setStateName(results.getString("state_abbreviation"));
+
+
+        if (results.getString("categories") != null) {
+            venue.setCategory(results.getString("categories"));
+        }
 
 
         return venue;
