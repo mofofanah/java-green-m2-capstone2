@@ -79,6 +79,21 @@ public class VenueMenu {
 
     }
 
+    public String printVenueSubMenu() {
+
+        System.out.println("***************************");
+        System.out.println(" Select Your Venue ");
+        System.out.println("***************************\n");
+
+        System.out.println("R. Return to previous menu\n");
+
+        System.out.println("Please select your choice (number only)");
+
+
+        String venueChoice =scanner.nextLine();
+        return venueChoice;
+    }
+
     public void printMessage (String message) {
         System.out.println(message);
     }

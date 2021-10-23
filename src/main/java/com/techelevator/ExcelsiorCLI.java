@@ -32,7 +32,6 @@ public class ExcelsiorCLI {
 		dataSource.setPassword("postgres1");
 
 
-
 		ExcelsiorCLI application = new ExcelsiorCLI(dataSource);
 		application.run();
 	}
@@ -57,16 +56,18 @@ public class ExcelsiorCLI {
 			if (choice.equals(LIST_VENUES)) {
 
 				//TODO: implement me using DAO
-				List<String> listOfVenues = venueDAO.retrieveAllVenues();
-				menu.printListOfVenues(listOfVenues);
+				handleVenueSubmenu();
 
-			}
-			else if(choice.equals(QUIT_PROGRAM)) {
+			} else if (choice.equals(SEARCH_HOMES_BY_MLS)) {
+
+				//call the menu to ask the user for a MLS Number..
+
+
+			} else if (choice.equals(QUIT_PROGRAM)) {
 
 				break;  // this allows us to exit the loop
 
-			}
-			else {
+			} else {
 
 				menu.printMessage(choice + " is not a valid option!");
 
@@ -79,5 +80,18 @@ public class ExcelsiorCLI {
 		//exit the program
 		System.out.println("Exiting the program.... Goodbye!");
 
+	}
+
+	private void handleVenueSubmenu() {
+
+		while (true) {
+
+			List<String> listOfVenues = venueDAO.retrieveAllVenues();
+			menu.printListOfVenues(listOfVenues);
+			String subMenuChoice = menu.printVenueSubMenu();
+
+			//if (subMenuChoice.equalsIgnoreCase()
+
+		}
 	}
 }
