@@ -3,6 +3,7 @@ package com.techelevator.model;
 import jdk.vm.ci.meta.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import sun.awt.image.IntegerComponentRaster;
 
 import javax.sql.DataSource;
 import java.time.LocalDate;
@@ -21,45 +22,51 @@ public class JDBCReservationDAO implements ReservationDAO{
     @Override
     public List<String> availableSpaces() {
 
+
+
+
+
         LocalDate reserveDate;
         List<String> allSpaces = spaceDAO.retrieveVenueSpaceDetails();
         List<String> availableSpaces = new ArrayList<>();
 
-        String sql = "SELECT open_from, open_to, reservation.start_date, reservation.end_date " +
-                "FROM space " + "JOIN reservation ON reservation.space_id = space.id " +
-                "WHERE open_from IS NOT NULL and open_to IS NOT NULL;";
+        String availableSpaceSql = "SELECT space.id, space.venue_id, space.name, space.is_accessible, space.open_from, space.open_to, space.daily_rate::money::numeric::float8, space.max_occupancy  FROM space " +
+                "WHERE space.venue_id = ? " +
+                "AND space.id NOT IN (SELECT space.id FROM space " +
+                "LEFT JOIN reservation ON space.id = reservation.space_id " +
+                "WHERE (? <= reservation.end_date " +
+                "AND ? >= reservation.start_date) " +
+                "OR EXTRACT(MONTH FROM CAST(? AS DATE)) < space.open_from " +
+                "OR EXTRACT(MONTH FROM CAST(? AS DATE)) > space.open_to " +
+                "OR space.max_occupancy < ?) " +
+                "ORDER BY space.daily_rate DESC " +
+                "LIMIT 5 ";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(availableSpaceSql);
 
         while (results.next()) {
 
+
+            Space spaces = mapRowToSpace(results);
             Reservation reservation = mapRowToReservation(results);
+            String idToString = Long.toString(spaces.getId());
+
+            String availableSpace = idToString + "" + spaces.getName() + "" + spaces.getDailyRate() + "" + spaces.getMaxOccupancy() +
+                    "" + spaces.isAccessible() + "" + 1000;
+            availableSpaces.add(availableSpace);
 
 
 
 
-            LocalDate startDate = reservation.getStartDate();
-            LocalDate endDate = reservation.getEndDate();
-            LocalDate userStartDate = LocalDate.of(2021, 10, 19);
-
-
-            if (startDate, endDate, LocalDate.)
-
-
-
-
-            }
         }
 
+        return availableSpaces;
 
 
 
 
 
-
-
-        return null;
-    }
+          }
 
     @Override
     public Reservation createReservation(Reservation newReservation) {
@@ -88,7 +95,20 @@ public class JDBCReservationDAO implements ReservationDAO{
         return reservation;
     }
 
-    public static boolean isOverlapping(re start1, Date end1, Date start2, Date end2) {
-        return start1.before(end2) && start2.before(end1);
+    private Space mapRowToSpace(SqlRowSet results) {
+
+        Space space = new Space();
+
+        space.setId(results.getLong("id"));
+        space.setName(results.getString("name"));
+        space.setAccessible(results.getBoolean("is_accessible"));
+        space.setOpenFrom(results.getInt("open_from"));
+        space.setOpenTo(results.getInt("open_to"));
+        space.setDailyRate(results.getBigDecimal("daily_rate"));
+        space.setMaxOccupancy(results.getInt("max_occupancy"));
+
+
+        return space;
     }
+
 }
