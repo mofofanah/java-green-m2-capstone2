@@ -1,9 +1,9 @@
 package com.techelevator.model;
 
-import jdk.vm.ci.meta.Local;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import sun.awt.image.IntegerComponentRaster;
+
 
 import javax.sql.DataSource;
 import java.time.LocalDate;
@@ -26,8 +26,8 @@ public class JDBCReservationDAO implements ReservationDAO{
 
 
 
-        LocalDate reserveDate;
-        List<String> allSpaces = spaceDAO.retrieveVenueSpaceDetails();
+
+
         List<String> availableSpaces = new ArrayList<>();
 
         String availableSpaceSql = "SELECT space.id, space.venue_id, space.name, space.is_accessible, space.open_from, space.open_to, space.daily_rate::money::numeric::float8, space.max_occupancy  FROM space " +
@@ -42,7 +42,7 @@ public class JDBCReservationDAO implements ReservationDAO{
                 "ORDER BY space.daily_rate DESC " +
                 "LIMIT 5 ";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(availableSpaceSql);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(availableSpaceSql, retrieveNextSpaceId(), retrieveNextVenueId() );
 
         while (results.next()) {
 
@@ -109,6 +109,24 @@ public class JDBCReservationDAO implements ReservationDAO{
 
 
         return space;
+    }
+
+    private int retrieveNextVenueId() {
+        SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('venue_id_seq')");
+        if(nextIdResult.next()) {
+            return nextIdResult.getInt(1);
+        } else {
+            throw new RuntimeException("Something went wrong while getting an id for the new Venue");
+        }
+    }
+
+    private int retrieveNextSpaceId () {
+        SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('space_id_seq')");
+        if (nextIdResult.next()) {
+            return nextIdResult.getInt(1);
+        } else {
+            throw new RuntimeException("Something went wrong while getting an id for the new Venue");
+        }
     }
 
 }

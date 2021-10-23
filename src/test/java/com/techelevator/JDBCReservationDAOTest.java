@@ -4,6 +4,7 @@ import com.techelevator.model.JDBCReservationDAO;
 import com.techelevator.model.JDBCSpaceDAO;
 import com.techelevator.model.JDBCVenueDAO;
 import org.junit.Before;
+import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
@@ -25,8 +26,17 @@ public class JDBCReservationDAOTest  extends DAOIntegrationTest {
 
 
     }
+    @Test
+    public void test_if_available_spaces_are_returned() {
 
-    List<String> availableSpaces= reservationDAO.availableSpaces();
+
+        List<String> availableSpaces= reservationDAO.availableSpaces();
+        for (String space : availableSpaces) {
+            System.out.println(space);
+        }
+    }
+
+
 
 
 }

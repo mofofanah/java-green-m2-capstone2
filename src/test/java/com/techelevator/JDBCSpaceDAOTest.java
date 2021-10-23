@@ -68,8 +68,8 @@ public class JDBCSpaceDAOTest extends DAOIntegrationTest{
 
 
         //to test if results are printing out
-        for (String spaces : allSpaceNames) {
-            System.out.println(spaces);
+        //for (String spaces : allSpaceNames) {
+           // System.out.println(spaces);
        }
 
 
@@ -77,7 +77,7 @@ public class JDBCSpaceDAOTest extends DAOIntegrationTest{
 
 
 
-    }
+
 
     private int retrieveNextSpaceId () {
         SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('space_id_seq')");
