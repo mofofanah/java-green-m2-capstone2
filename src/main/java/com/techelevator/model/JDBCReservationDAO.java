@@ -39,7 +39,6 @@ public class JDBCReservationDAO implements ReservationDAO{
 
 
             LocalDate startDate = reservation.getStartDate();
-            String startDateString = startDate.toString();
             LocalDate endDate = reservation.getEndDate();
             LocalDate userStartDate = LocalDate.of(2021, 10, 19);
 
