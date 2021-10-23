@@ -22,13 +22,14 @@ public class JDBCReservationDAO implements ReservationDAO{
     @Override
     public List<String> availableSpaces() {
 
-
-
-
-
-
+        int daysReserved = 5;
+        String userDate = "2016-08-16";
+        LocalDate userStartDate = LocalDate.parse(userDate);
+        LocalDate userEndDate = userStartDate.plusDays(daysReserved);
 
         List<String> availableSpaces = new ArrayList<>();
+        List<String> openToAndOpenFrom = spaceDAO.retrieveVenueSpaceDetails();
+
 
         String availableSpaceSql = "SELECT space.id, space.venue_id, space.name, space.is_accessible, space.open_from, space.open_to, space.daily_rate::money::numeric::float8, space.max_occupancy  FROM space " +
                 "WHERE space.venue_id = ? " +
@@ -42,10 +43,9 @@ public class JDBCReservationDAO implements ReservationDAO{
                 "ORDER BY space.daily_rate DESC " +
                 "LIMIT 5 ";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(availableSpaceSql, retrieveNextSpaceId(), retrieveNextVenueId() );
+        SqlRowSet results = jdbcTemplate.queryForRowSet(availableSpaceSql, 1, userStartDate, userEndDate, 100);
 
         while (results.next()) {
-
 
             Space spaces = mapRowToSpace(results);
             Reservation reservation = mapRowToReservation(results);
@@ -54,9 +54,6 @@ public class JDBCReservationDAO implements ReservationDAO{
             String availableSpace = idToString + "" + spaces.getName() + "" + spaces.getDailyRate() + "" + spaces.getMaxOccupancy() +
                     "" + spaces.isAccessible() + "" + 1000;
             availableSpaces.add(availableSpace);
-
-
-
 
         }
 
@@ -120,13 +117,26 @@ public class JDBCReservationDAO implements ReservationDAO{
         }
     }
 
-    private int retrieveNextSpaceId () {
-        SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('space_id_seq')");
-        if (nextIdResult.next()) {
-            return nextIdResult.getInt(1);
-        } else {
-            throw new RuntimeException("Something went wrong while getting an id for the new Venue");
-        }
+  //  private int retrieveNextSpaceId () {
+    //    SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('space_id_seq')");
+   //     if (nextIdResult.next()) {
+         //   return nextIdResult.getInt(1);
+   //     } else {
+       //    throw new RuntimeException("Something went wrong while getting an id for the new Venue");
+    //    }
+     //   return retrieveNextReservationId();
     }
 
-}
+ //   public LocalDate retrieveDateFromSpaces() {
+
+    //    String sql = "SELECT open_to, open_from " + "FROM space " + "WHERE venue_id = 1;";
+
+      //  SqlRowSet retrieveDateFromVenueSpace = jdbcTemplate.queryForRowSet(sql);
+
+      //;  return LocalDa;
+
+
+   // }
+
+
+
