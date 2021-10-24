@@ -17,31 +17,52 @@ public class JDBCVenueDAO implements VenueDAO {
     }
 
     @Override
-    public List<String> retrieveAllVenues() {
-        List<String> venueNames = new ArrayList<>();
-        //List<Venue> venues = new ArrayList<>();
+    public List<Venue> retrieveAllVenues() {
 
-        String sql = "select venue.id, venue.name, city.name as city, state_abbreviation, description, string_agg(category.name, ', ') as categories " +
+        List<Venue> venues = new ArrayList<>();
+
+
+
+        String sql = "select venue.id, venue.name, city.name as city, state_abbreviation, description " +
                 "from venue " +
-                "join city on venue.city_id = city.id " +
-                "left join category_venue on venue.id = category_venue.venue_id " +
-                "left join category on category_venue.category_id = category.id " +
-                "group by venue.id, city.name, city.state_abbreviation " +
-                "order by venue.name";
+                "JOIN city ON city.id = venue.city_id " +
+                "JOIN state on state.abbreviation = city.state_abbreviation " +
+                "ORDER BY venue.name";
+
+
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
-        int count = 1;
+
+        String categorySql = "SELECT category.name " +
+                "FROM category_venue " +
+                "JOIN category ON category.id = category_venue.category_id " +
+                "WHERE category_venue.venue_id = ?;";
+
 
         while (results.next()) {
             //take the items out of the results and put into a home object
             Venue venue = mapRowToVenue(results);
             //add home object to our list
-            venueNames.add(count++ + ") " + venue.getName());
-           // venues.add(venue);
+            List<String> categoryList = new ArrayList<>();
+
+            SqlRowSet categoryResults = jdbcTemplate.queryForRowSet(categorySql, venue.getId());
+
+            while (categoryResults.next()) {
+
+                String categoryName = categoryResults.getString("name");
+                categoryList.add(categoryName);
+            }
+
+
+            venue.setCategories(categoryList);
+            venues.add(venue);
+
+
+
         }
 
 
-        return venueNames;
+        return venues;
 
 
 
@@ -126,11 +147,6 @@ public class JDBCVenueDAO implements VenueDAO {
         venue.setDescription(results.getString("description"));
         venue.setCityName(results.getString("city"));
         venue.setStateName(results.getString("state_abbreviation"));
-
-
-        if (results.getString("categories") != null) {
-            venue.setCategory(results.getString("categories"));
-        }
 
 
         return venue;

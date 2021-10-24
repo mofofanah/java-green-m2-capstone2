@@ -24,31 +24,30 @@ import com.techelevator.model.ReservationRequest;
 public class VenueMenu {
 
 
-        private PrintWriter out;
-        private Scanner scanner;
+    private Scanner scanner;
 
-    public VenueMenu(InputStream input, OutputStream output) {
-        this.out = new PrintWriter(output);
-        this.scanner = new Scanner(input);
+    public VenueMenu() {
+
+        this.scanner = new Scanner(System.in);
     }
 
 
+    public String printMainMenu() {
 
-        public String printMainMenu() {
+        System.out.println("***************************");
+        System.out.println("     Excelsior Venues");
+        System.out.println("***************************\n");
 
-            System.out.println("***************************");
-            System.out.println("     Excelsior Venues");
-            System.out.println("***************************\n");
+        System.out.println("1. List Venues");
+        System.out.println("Q. Quit\n");
 
-            System.out.println("1. List Venues");
-            System.out.println("Q. Quit\n");
+        System.out.println("Please select your choice (number only)");
 
-            System.out.println("Please select your choice (number only)");
+        return scanner.nextLine();
 
-            return scanner.nextLine();
+    }
 
-        }
-    public void printListOfVenues(List<String> venuesToPrint) {
+    public void printListOfVenues(List<Venue> venuesToPrint) {
 
 
         System.out.println("\n*********** Listing Results ************\n");
@@ -58,25 +57,28 @@ public class VenueMenu {
             System.out.println("No Results Found!");
             return;
         }
+        int count = 1;
+        for (Venue venue : venuesToPrint) {
 
-        for (String venue : venuesToPrint) {
-            System.out.println(venue);
+            System.out.println(count++ + ") " + venue.getName());
         }
     }
 
     public void printVenue(Venue venue) {
 
-        if (venue== null) {
+        if (venue == null) {
             System.out.println("No results found... Pleast try again.");
             return;
         }
-        int count = 1;
-
-        if (venue.getId() > 0) {
-            System.out.println(venue);
-        }
 
 
+        System.out.println(venue.getName());
+        System.out.println("Location: " + venue.getCityName() + ", " + venue.getStateName());
+        System.out.println(venue.getCategories());
+        System.out.println();
+        System.out.println();
+
+        System.out.println(venue.getDescription());
 
         System.out.println("\n*********** *** *** ***  ************\n");
 
@@ -93,64 +95,14 @@ public class VenueMenu {
         System.out.println("Please select your choice (number only)");
 
 
-        String venueChoice =scanner.nextLine();
+        String venueChoice = scanner.nextLine();
         return venueChoice;
     }
+    public String retrieveIdNumberFromUser() {
 
-    public void printMessage (String message) {
-        System.out.println(message);
-    }
+        System.out.println("\nPlease enter a venue number");
+        return scanner.nextLine();
 
-    public Object getChoiceFromOptions(Object[] options) {
-        Object choice = null;
-        while(choice == null) {
-            displayMenuOptions(options);
-            choice = getChoiceFromUserInput(options);
-        }
-        return choice;
-    }
-
-    private Object getChoiceFromUserInput(Object[] options) {
-        Object choice = null;
-        String userInput = scanner.nextLine();
-        try {
-            int selectedOption = Integer.valueOf(userInput);
-            if(selectedOption <= options.length) {
-                choice = options[selectedOption - 1];
-            }
-        } catch(NumberFormatException e) {
-            // eat the exception, an error message will be displayed below since choice will be null
-        }
-        if(choice == null) {
-            out.println("\n*** "+userInput+" is not a valid option ***\n");
-        }
-        return choice;
-    }
-
-    private void displayMenuOptions(Object[] options) {
-        out.println();
-        for(int i = 0; i < options.length; i++) {
-            int optionNum = i+1;
-            out.println(optionNum+") "+options[i]);
-        }
-        out.print("\nPlease choose an option >>> ");
-        out.flush();
     }
 }
-
-
-
-
-
-
-   // public void printVenueDetails (String )
-
-
-
-
-
-
-
-
-
 

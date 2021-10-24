@@ -1,5 +1,5 @@
 package com.techelevator;
-
+/*
 import com.techelevator.model.JDBCVenueDAO;
 import com.techelevator.model.Venue;
 import org.junit.Before;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
-
+/*
 public class JDBCVenueDAOTest extends DAOIntegrationTest {
     // dO a @before for test
     private JDBCVenueDAO dao;
@@ -50,7 +50,7 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
 
 
         //Act
-        List<String> allVenueNames = dao.retrieveAllVenues(); //method under test
+       // List<String> allVenueNames = dao.retrieveAllVenues(); //method under test
         //Assert
 
        //Venue venue = dao.retrieveVenueDetails();
@@ -58,20 +58,20 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
 
 
 
-        assertNotNull(allVenueNames);
-         if (allVenueNamesBeforeInsert.size() + 2 == allVenueNames.size()) {
+       // assertNotNull(allVenueNames);
+       //  if (allVenueNamesBeforeInsert.size() + 2 == allVenueNames.size()) {
 
-             assertTrue(true);
-         }
-         else {
-             assertTrue(false);
-         }
+       //      assertTrue(true);
+      //   }
+      //   else {
+    //         assertTrue(false);
+        // }
+//
 
 
+ //   }
 
-    }
-
-    @Test
+  /*  @Test
 
     public void to_see_if_venue_details_are_retrieved () {
 
@@ -104,3 +104,4 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
 
 
    }
+*/

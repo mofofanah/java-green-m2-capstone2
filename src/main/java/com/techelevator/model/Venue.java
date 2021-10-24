@@ -9,7 +9,7 @@ public class Venue {
     private String description;
     private String cityName;
     private String stateName;
-    private String category;
+    private List<String> categories;
 
     public long getId() {
         return id;
@@ -51,11 +51,11 @@ public class Venue {
         this.stateName = stateName;
     }
 
-    public String getCategory() {
-        return category;
+    public List<String> getCategories() {
+        return categories;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 }

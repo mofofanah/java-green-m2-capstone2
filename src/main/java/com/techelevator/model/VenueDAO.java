@@ -7,7 +7,7 @@ public interface VenueDAO {
 
 
 
-    public List<String> retrieveAllVenues();
+    public List<Venue> retrieveAllVenues();
     public Venue retrieveVenueDetailsById(long id);
 
 
