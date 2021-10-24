@@ -14,8 +14,9 @@ public class ExcelsiorCLI {
 	private static final String LIST_VENUES = "1"; // when the user selects 1 they are shown a list of all venues
 
 	private static final String QUIT_PROGRAM = "Q"; //when user presses "Q" the program will terminate.
+	private static final String QUIT_VENUE_SUB_MENU = "R";
 
-	private static final String MAIN_MENU_OPTION_BLUE_NOMAD_OUTPOST = "Blue Nomad Outpost";
+	private static final String MAIN_MENU_OPTION_BLUE_NOMAD_OUTPOST = "1";
 	private static final String MAIN_MENU_OPTION_CRYSTAL_TRAVELER_TAPROOM = "Crystal Traveler Taproom";
 	private static final String MAIN_MENU_OPTION_CURIOUS_ANCHOR_GARAGE = "Curious Anchor Garage";
 	private static final String MAIN_MENU_OPTION_FEISTY_BARREL_SALOON = "Feisty Barrel Saloon";
@@ -94,13 +95,14 @@ public class ExcelsiorCLI {
 
 
 
-			} else if (choice.equals(QUIT_PROGRAM)) {
+			} else if (choice.equals(QUIT_VENUE_SUB_MENU)) {
 
 				break;  // this allows us to exit the loop
 
 			} else {
-
-				menu.printMessage(choice + " is not a valid option!");
+				Venue venueChoice = venueDAO.retrieveVenueDetailsById(Long.parseLong(choice));
+				String venueChoiceString = venueChoice.getName();
+				menu.printMessage(venueChoiceString);
 
 			}
 
@@ -123,7 +125,7 @@ public class ExcelsiorCLI {
 			Venue venue = new Venue();
 			//List<String> venueDetails = venueDAO.retrieveVenueDetails();
 
-			if (choice.equalsIgnoreCase("R")) {
+			if (choice.equals(QUIT_VENUE_SUB_MENU)) {
 				break;
 
 
