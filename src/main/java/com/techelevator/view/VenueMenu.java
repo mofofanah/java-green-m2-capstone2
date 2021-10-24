@@ -86,17 +86,17 @@ public class VenueMenu {
 
     public String printVenueSubMenu() {
 
-        System.out.println("***************************");
-        System.out.println(" Select Your Venue ");
-        System.out.println("***************************\n");
 
+        System.out.println("What would like to do next?");
+        System.out.println("1) View Spaces");
+        System.out.println("2) Search for Reservation");
         System.out.println("R. Return to previous menu\n");
 
         System.out.println("Please select your choice (number only)");
 
 
-        String venueChoice = scanner.nextLine();
-        return venueChoice;
+        String userChoice = scanner.nextLine();
+        return userChoice;
     }
     public String retrieveIdNumberFromUser() {
 
@@ -104,5 +104,9 @@ public class VenueMenu {
         return scanner.nextLine();
 
     }
+
+
+
+
 }
 

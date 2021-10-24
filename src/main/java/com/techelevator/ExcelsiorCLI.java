@@ -70,6 +70,10 @@ public class ExcelsiorCLI {
 
 
 			}
+			else if (Integer.parseInt(menu.retrieveIdNumberFromUser()) > 0) {
+				System.out.println(menu);
+				handleVenueSubmenu();
+			}
 
 
 
@@ -94,17 +98,11 @@ public class ExcelsiorCLI {
 	private void handleVenueSubmenu() {
 
 		while (true) {
-
-
-
-
-
-
-
-
-
+		String subChoice = menu.printVenueSubMenu();
 
 
 		}
+
+
 	}
 }
