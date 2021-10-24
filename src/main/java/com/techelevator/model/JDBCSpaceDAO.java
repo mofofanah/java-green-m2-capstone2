@@ -38,7 +38,7 @@ public class JDBCSpaceDAO implements SpaceDAO{
             space.setOpenTo(results.getInt("open_to"));
             space.setDailyRate(results.getBigDecimal("daily_rate"));
             space.setMaxOccupancy(results.getInt("max_occupancy"));
-            space.setVenueId(results.getLong("venue_id"));
+
 
 
             return space;
@@ -64,20 +64,24 @@ public class JDBCSpaceDAO implements SpaceDAO{
 
     @Override
     public List<Space> retrieveVenueSpaces(long id) {
+
+
+        Space space = null;
         List<Space> spaces = new ArrayList<>();
         // "SELECT id, name, is_accessible, open_from, open_to, cast(daily_rate as decimal), max_occupancy " +
         //   "FROM space;";
         //create a SQL statement
-        String sql = "SELECT id, name, is_accessible, open_from, open_to, cast(daily_rate as decimal), max_occupancy " +
-                "FROM space " +
-                "WHERE space.venue_id = ?;";
+        String sql = "SELECT space.id, space.name, space.is_accessible, space.open_from, space.open_to, cast(space.daily_rate as decimal), space.max_occupancy " +
+                "FROM venue " +
+                "JOIN space ON space.venue_id = venue.id " +
+                "WHERE venue.id = ?;";
         //calling the database and executing our query
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql,id);
 
         //loop through the results, if any.
         while (results.next()) {
-
-            spaces.add(mapRowToSpace(results));
+            space =  mapRowToSpace(results);
+            spaces.add(space);
 
 
 

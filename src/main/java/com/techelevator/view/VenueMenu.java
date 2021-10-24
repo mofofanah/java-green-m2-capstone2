@@ -92,25 +92,28 @@ public class VenueMenu {
         System.out.println("2) Search for Reservation");
         System.out.println("R. Return to previous menu\n");
 
-        System.out.println("Please select your choice (number only)");
+       System.out.println("Please select your choice (number only)");
 
 
-        String userChoice = scanner.nextLine();
-        return userChoice;
+       String userChoice = retrieveIdNumberFromUser();
+       return userChoice;
     }
 
 
-    public void printSpaces (List<Space> spacesToPrint) {
+    public void printListSpaces (List<Space> spacesToPrint) {
 
         if (spacesToPrint.isEmpty()) {
             System.out.println("No Results Found!");
             return;
         }
         int count = 1;
+        System.out.println("Name                Open   Close   Daily Rate   Max. Occupancy");
         for (Space spaces : spacesToPrint) {
 
             String details = spaces.getName();
-            System.out.println("#" + count++  + " " +  details) ;
+
+            System.out.println("#" + count++  + " " + spaces.getName() + "                " + spaces.getOpenFrom() +
+                    "   " + spaces.getOpenTo() + "   $" + spaces.getDailyRate() + "   " + spaces.getMaxOccupancy());
         }
 
         System.out.println("\n*********** *** *** ***  ************\n");

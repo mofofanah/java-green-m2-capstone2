@@ -52,7 +52,7 @@ public class ExcelsiorCLI {
 		while (true) {
 
 			String choice = menu.printMainMenu();
-			System.out.println("You chose " + choice);  // TODO:  delete me
+
 
 			if (choice.equals(LIST_VENUES)) {
 
@@ -105,10 +105,13 @@ public class ExcelsiorCLI {
 			String subChoice = menu.printVenueSubMenu();
 
 			if(subChoice.equals(VIEW_SPACES)) {
-				List<Space> spacesList = spaceDAO.retrieveVenueSpaceDetails();
 				String venueId = menu.retrieveIdNumberFromUser();
+
+
 				List<Venue> venueList = venueDAO.retrieveAllVenues();
 				Venue venueFromUserId= venueList.get(Integer.parseInt(venueId) - 1);
+				List<Space> spacesList = spaceDAO.retrieveVenueSpaces(Integer.parseInt(venueId));
+				menu.printListSpaces(spacesList);
 
 
 
