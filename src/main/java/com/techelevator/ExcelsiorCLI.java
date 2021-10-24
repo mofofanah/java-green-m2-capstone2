@@ -134,7 +134,7 @@ public class ExcelsiorCLI {
 
 				venue = venueDAO.retrieveVenueDetailsById(Integer.parseInt(choice));
 
-				menu.printMessage(venue.getName());
+				menu.printMessage(menu.
 
 
 
