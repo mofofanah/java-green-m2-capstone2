@@ -50,7 +50,7 @@ public class VenueMenu {
     public void printListOfVenues(List<Venue> venuesToPrint) {
 
 
-        System.out.println("\n*********** Listing Results ************\n");
+        System.out.println("\n*********** Venues ************\n");
 
 
         if (venuesToPrint.isEmpty()) {
@@ -71,7 +71,7 @@ public class VenueMenu {
             return;
         }
 
-
+        System.out.println("\n*********** *** Venue Description ***  ************\n");
         System.out.println(venue.getName());
         System.out.println("Location: " + venue.getCityName() + ", " + venue.getStateName());
         System.out.println(venue.getCategories());
@@ -97,6 +97,23 @@ public class VenueMenu {
 
         String userChoice = scanner.nextLine();
         return userChoice;
+    }
+
+
+    public void printSpaces (List<Venue> spacesToPrint) {
+
+        if (spacesToPrint.isEmpty()) {
+            System.out.println("No Results Found!");
+            return;
+        }
+        int count = 1;
+        for (Venue venue : spacesToPrint) {
+
+            String details = venue.getSpaces().toString();
+            System.out.println("#" + count++  + " " +  details) ;
+        }
+
+        System.out.println("\n*********** *** *** ***  ************\n");
     }
     public String retrieveIdNumberFromUser() {
 

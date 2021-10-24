@@ -1,3 +1,6 @@
+
+/*
+
 package com.techelevator.model;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,40 +13,43 @@ import java.util.List;
 public class JDBCSpaceDAO implements SpaceDAO{
 
     private JdbcTemplate jdbcTemplate;
+    private VenueDAO venueDAO;
 
     public JDBCSpaceDAO(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
 
-    public List<String> retrieveVenueSpaceDetails() {
+    public List<Space> retrieveVenueSpaceDetails() {
 
-        List<String> spaces = new ArrayList<>();
+        List<Space> spaces = new ArrayList<>();
        // "SELECT id, name, is_accessible, open_from, open_to, cast(daily_rate as decimal), max_occupancy " +
              //   "FROM space;";
         //create a SQL statement
         String sql = "SELECT id, name, is_accessible, open_from, open_to, cast(daily_rate as decimal), max_occupancy " +
-                "FROM space;";
+                "FROM space " +
+                "WHERE space.venue_id = ?;";
         //calling the database and executing our query
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,retrieveNextVenueId());
 
         //loop through the results, if any.
         while (results.next()) {
 
-
-            //take the items out of the results and put into a home object
             Space space = mapRowToSpace(results);
-
-            String details = space.getName() + " " + space.isAccessible() + " " + space.getOpenFrom() + " " +
-                    space.getOpenTo() + " " + space.getDailyRate() + " " + space.getMaxOccupancy();
-                    //add home object to our list
-            spaces.add(details);
+            spaces.add(space);
+            List<String> spacesList = new ArrayList<>();
+            SqlRowSet spacesResults = jdbcTemplate.queryForRowSet(sql, retrieveNextVenueId());
 
 
 
-        }
-        return spaces;
-    }
+            }
+
+
+
+
+      //  }
+       // return spaces;
+   // }
 
         private Space mapRowToSpace(SqlRowSet results) {
 
@@ -69,4 +75,14 @@ public class JDBCSpaceDAO implements SpaceDAO{
             throw new RuntimeException("Something went wrong while getting an id for the new Venue");
         }
     }
+
+    private int retrieveNextVenueId() {
+        SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('venue_id_seq')");
+        if(nextIdResult.next()) {
+            return nextIdResult.getInt(1);
+        } else {
+            throw new RuntimeException("Something went wrong while getting an id for the new Venue");
+        }
+    }
 }
+*/

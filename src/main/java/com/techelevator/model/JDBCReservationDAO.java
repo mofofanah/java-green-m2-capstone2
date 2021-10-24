@@ -28,7 +28,7 @@ public class JDBCReservationDAO implements ReservationDAO{
         LocalDate userEndDate = userStartDate.plusDays(daysReserved);
 
         List<String> availableSpaces = new ArrayList<>();
-        List<String> openToAndOpenFrom = spaceDAO.retrieveVenueSpaceDetails();
+       // List<String> openToAndOpenFrom = spaceDAO.retrieveVenueSpaceDetails();
 
 
         String availableSpaceSql = "SELECT space.id, space.venue_id, space.name, space.is_accessible, space.open_from, space.open_to, space.daily_rate::money::numeric::float8, space.max_occupancy  FROM space " +

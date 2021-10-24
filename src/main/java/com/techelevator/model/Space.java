@@ -12,6 +12,7 @@ public class Space {
     private BigDecimal dailyRate;
     private int maxOccupancy;
 
+
     public long getId() {
         return id;
     }

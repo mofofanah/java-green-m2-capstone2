@@ -15,6 +15,7 @@ public class ExcelsiorCLI {
 
 	private static final String QUIT_PROGRAM = "Q"; //when user presses "Q" the program will terminate.
 	private static final String QUIT_VENUE_SUB_MENU = "R";
+	private static final String VIEW_SPACES = "1";
 
 
 
@@ -40,7 +41,7 @@ public class ExcelsiorCLI {
 		// create your DAOs here
 		this.menu = new VenueMenu();
 		venueDAO = new JDBCVenueDAO(datasource);
-		spaceDAO = new JDBCSpaceDAO(datasource);
+		//spaceDAO = new JDBCSpaceDAO(datasource);
 		reservationDAO = new JDBCReservationDAO(datasource);
 
 	}
@@ -67,12 +68,14 @@ public class ExcelsiorCLI {
 				menu.printVenue(venueFromUserId);
 				//take printDetails method
 				//take them to submenu after this.
+				handleVenueSubmenu();
 
 
 			}
 			else if (Integer.parseInt(menu.retrieveIdNumberFromUser()) > 0) {
-				System.out.println(menu);
+
 				handleVenueSubmenu();
+
 			}
 
 
@@ -98,7 +101,25 @@ public class ExcelsiorCLI {
 	private void handleVenueSubmenu() {
 
 		while (true) {
-		String subChoice = menu.printVenueSubMenu();
+
+			String subChoice = menu.printVenueSubMenu();
+
+			if(subChoice.equals(VIEW_SPACES)) {
+				List<Space> spacesList = spaceDAO.retrieveVenueSpaceDetails();
+				String venueId = menu.retrieveIdNumberFromUser();
+				List<Venue> venueList = venueDAO.retrieveAllVenues();
+				Venue venueFromUserId= venueList.get(Integer.parseInt(venueId) - 1);
+
+
+
+
+				menu.printSpaces(spacesList);
+
+
+			}
+
+
+
 
 
 		}

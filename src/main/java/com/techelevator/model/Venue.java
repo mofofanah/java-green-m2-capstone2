@@ -10,6 +10,7 @@ public class Venue {
     private String cityName;
     private String stateName;
     private List<String> categories;
+    private List<String> spaces;
 
     public long getId() {
         return id;
@@ -21,6 +22,14 @@ public class Venue {
 
     public String getName() {
         return name;
+    }
+
+    public List<String> getSpaces() {
+        return spaces;
+    }
+
+    public void setSpaces(List<String> spaces) {
+        this.spaces = spaces;
     }
 
     public void setName(String name) {

@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface SpaceDAO {
 
-    public List<String> retrieveVenueSpaceDetails();
+    public List<Space> retrieveVenueSpaceDetails();
     }
 

@@ -1,3 +1,6 @@
+
+/*
+
 package com.techelevator;
 
 import com.techelevator.model.JDBCSpaceDAO;
@@ -35,7 +38,7 @@ public class JDBCSpaceDAOTest extends DAOIntegrationTest{
         //Arrange
         int nextId = retrieveNextSpaceId();
         int nextVenueId = retrieveNextVenueId();
-        List<String> allSpaceNamesBeforeInsert = dao.retrieveVenueSpaceDetails();
+      //  List<String> allSpaceNamesBeforeInsert = dao.retrieveVenueSpaceDetails();
 
 
         String venueSQL = "INSERT INTO venue (id, name, city_id, description) " +
@@ -101,4 +104,5 @@ public class JDBCSpaceDAOTest extends DAOIntegrationTest{
 
 
 
-}
+
+*/
