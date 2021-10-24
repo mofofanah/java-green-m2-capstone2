@@ -1,10 +1,12 @@
 package com.techelevator.view;
 
-import java.util.Scanner;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.*;
 
 import java.util.Scanner;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Scanner;
 
 import com.techelevator.model.JDBCVenueDAO;
@@ -22,12 +24,13 @@ import com.techelevator.model.ReservationRequest;
 public class VenueMenu {
 
 
-
+        private PrintWriter out;
         private Scanner scanner;
 
-        public VenueMenu() {
-            scanner = new Scanner(System.in);
-        }
+    public VenueMenu(InputStream input, OutputStream output) {
+        this.out = new PrintWriter(output);
+        this.scanner = new Scanner(input);
+    }
 
 
 
@@ -98,6 +101,48 @@ public class VenueMenu {
         System.out.println(message);
     }
 
+    public Object getChoiceFromOptions(Object[] options) {
+        Object choice = null;
+        while(choice == null) {
+            displayMenuOptions(options);
+            choice = getChoiceFromUserInput(options);
+        }
+        return choice;
+    }
+
+    private Object getChoiceFromUserInput(Object[] options) {
+        Object choice = null;
+        String userInput = scanner.nextLine();
+        try {
+            int selectedOption = Integer.valueOf(userInput);
+            if(selectedOption <= options.length) {
+                choice = options[selectedOption - 1];
+            }
+        } catch(NumberFormatException e) {
+            // eat the exception, an error message will be displayed below since choice will be null
+        }
+        if(choice == null) {
+            out.println("\n*** "+userInput+" is not a valid option ***\n");
+        }
+        return choice;
+    }
+
+    private void displayMenuOptions(Object[] options) {
+        out.println();
+        for(int i = 0; i < options.length; i++) {
+            int optionNum = i+1;
+            out.println(optionNum+") "+options[i]);
+        }
+        out.print("\nPlease choose an option >>> ");
+        out.flush();
+    }
+}
+
+
+
+
+
+
    // public void printVenueDetails (String )
 
 
@@ -106,6 +151,6 @@ public class VenueMenu {
 
 
 
-}
+
 
 
