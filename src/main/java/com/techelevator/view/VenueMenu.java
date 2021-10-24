@@ -100,16 +100,16 @@ public class VenueMenu {
     }
 
 
-    public void printSpaces (List<Venue> spacesToPrint) {
+    public void printSpaces (List<Space> spacesToPrint) {
 
         if (spacesToPrint.isEmpty()) {
             System.out.println("No Results Found!");
             return;
         }
         int count = 1;
-        for (Venue venue : spacesToPrint) {
+        for (Space spaces : spacesToPrint) {
 
-            String details = venue.getSpaces().toString();
+            String details = spaces.getName();
             System.out.println("#" + count++  + " " +  details) ;
         }
 

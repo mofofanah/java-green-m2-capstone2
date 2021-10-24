@@ -1,5 +1,5 @@
 
-/*
+
 
 package com.techelevator.model;
 
@@ -20,36 +20,12 @@ public class JDBCSpaceDAO implements SpaceDAO{
     }
 
 
-    public List<Space> retrieveVenueSpaceDetails() {
-
-        List<Space> spaces = new ArrayList<>();
-       // "SELECT id, name, is_accessible, open_from, open_to, cast(daily_rate as decimal), max_occupancy " +
-             //   "FROM space;";
-        //create a SQL statement
-        String sql = "SELECT id, name, is_accessible, open_from, open_to, cast(daily_rate as decimal), max_occupancy " +
-                "FROM space " +
-                "WHERE space.venue_id = ?;";
-        //calling the database and executing our query
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,retrieveNextVenueId());
-
-        //loop through the results, if any.
-        while (results.next()) {
-
-            Space space = mapRowToSpace(results);
-            spaces.add(space);
-            List<String> spacesList = new ArrayList<>();
-            SqlRowSet spacesResults = jdbcTemplate.queryForRowSet(sql, retrieveNextVenueId());
-
-
-
-            }
 
 
 
 
-      //  }
-       // return spaces;
-   // }
+
+
 
         private Space mapRowToSpace(SqlRowSet results) {
 
@@ -62,6 +38,7 @@ public class JDBCSpaceDAO implements SpaceDAO{
             space.setOpenTo(results.getInt("open_to"));
             space.setDailyRate(results.getBigDecimal("daily_rate"));
             space.setMaxOccupancy(results.getInt("max_occupancy"));
+            space.setVenueId(results.getLong("venue_id"));
 
 
             return space;
@@ -84,5 +61,31 @@ public class JDBCSpaceDAO implements SpaceDAO{
             throw new RuntimeException("Something went wrong while getting an id for the new Venue");
         }
     }
+
+    @Override
+    public List<Space> retrieveVenueSpaces(long id) {
+        List<Space> spaces = new ArrayList<>();
+        // "SELECT id, name, is_accessible, open_from, open_to, cast(daily_rate as decimal), max_occupancy " +
+        //   "FROM space;";
+        //create a SQL statement
+        String sql = "SELECT id, name, is_accessible, open_from, open_to, cast(daily_rate as decimal), max_occupancy " +
+                "FROM space " +
+                "WHERE space.venue_id = ?;";
+        //calling the database and executing our query
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,id);
+
+        //loop through the results, if any.
+        while (results.next()) {
+
+            spaces.add(mapRowToSpace(results));
+
+
+
+
+
+        }
+
+        return spaces;
+
+    }
 }
-*/

@@ -38,9 +38,7 @@ public class JDBCVenueDAO implements VenueDAO {
                 "JOIN category ON category.id = category_venue.category_id " +
                 "WHERE category_venue.venue_id = ?;";
 
-        String spaceSql = "SELECT id, name, is_accessible, open_from, open_to, cast(daily_rate as decimal), max_occupancy " +
-                "FROM space " +
-                "WHERE space.venue_id = ?;";
+
 
 
         while (results.next()) {
@@ -48,8 +46,7 @@ public class JDBCVenueDAO implements VenueDAO {
             Venue venue = mapRowToVenue(results);
 
             List<String> categoryList = new ArrayList<>();
-            List<String> listOfSpaces = new ArrayList<>();
-            SqlRowSet spaceResults = jdbcTemplate.queryForRowSet(sql, venue.getId());
+
 
 
             SqlRowSet categoryResults = jdbcTemplate.queryForRowSet(categorySql, venue.getId());
@@ -61,14 +58,10 @@ public class JDBCVenueDAO implements VenueDAO {
 
             }
 
-            while (spaceResults.next()) {
-                String spacesResults = spaceResults.getString("name");
-                listOfSpaces.add(spacesResults);
-            }
 
 
 
-            venue.setSpaces(listOfSpaces);
+
             venue.setCategories(categoryList);
             venues.add(venue);
 

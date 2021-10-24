@@ -11,7 +11,15 @@ public class Space {
     private int openTo;
     private BigDecimal dailyRate;
     private int maxOccupancy;
+    private long venueId;
 
+    public long getVenueId() {
+        return venueId;
+    }
+
+    public void setVenueId(long venueId) {
+        this.venueId = venueId;
+    }
 
     public long getId() {
         return id;

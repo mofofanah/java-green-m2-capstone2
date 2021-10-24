@@ -41,7 +41,7 @@ public class ExcelsiorCLI {
 		// create your DAOs here
 		this.menu = new VenueMenu();
 		venueDAO = new JDBCVenueDAO(datasource);
-		//spaceDAO = new JDBCSpaceDAO(datasource);
+		spaceDAO = new JDBCSpaceDAO(datasource);
 		reservationDAO = new JDBCReservationDAO(datasource);
 
 	}
@@ -113,7 +113,7 @@ public class ExcelsiorCLI {
 
 
 
-				menu.printSpaces(spacesList);
+
 
 
 			}
