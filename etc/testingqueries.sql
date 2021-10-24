@@ -69,7 +69,7 @@ Select cast(daily_rate as decimal) FROM space
 SELECT open_from, open_to, reservation.start_date, reservation.end_date FROM space
 join reservation ON reservation.space_id = space.id
 WHERE open_from IS NOT NULL and open_to IS NOT NULL 
-AND (DATE '2021-02-16', DATE '2021-11-26') OVERLAPS
+AND (DATE '2021-10-19', DATE '2021-10-20') OVERLAPS
        (start_date, end_date)
        
 
