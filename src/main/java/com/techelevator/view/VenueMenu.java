@@ -107,13 +107,13 @@ public class VenueMenu {
             return;
         }
         int count = 1;
-        System.out.println("Name                Open   Close   Daily Rate   Max. Occupancy");
+        System.out.println(String.format(("%-20s"),"Name" ) + (String.format("%-20s", "open") + (String.format("%-20s","Close") +  String.format("%-20s" ,"Daily Rate") + String.format("%-20s" ,   "Max. Occupancy"))));
         for (Space spaces : spacesToPrint) {
 
             String details = spaces.getName();
 
-            System.out.println("#" + count++  + " " + spaces.getName() + "                " + spaces.getOpenFrom() +
-                    "   " + spaces.getOpenTo() + "   $" + spaces.getDailyRate() + "   " + spaces.getMaxOccupancy());
+            System.out.println("#" + count++  + " " + String.format("%-18s", spaces.getName())  + String.format("%-18s", spaces.getOpenFrom()) +
+                    "   " +String.format("%-18s", spaces.getOpenTo()) + "   $" + String.format("%-18s" , spaces.getDailyRate())  + String.format("%-18s", spaces.getMaxOccupancy()));
         }
 
         System.out.println("\n*********** *** *** ***  ************\n");

@@ -60,7 +60,7 @@ public class JDBCVenueDAO implements VenueDAO {
 
 
 
-
+ 
 
             venue.setCategories(categoryList);
             venues.add(venue);
