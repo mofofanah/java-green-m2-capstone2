@@ -13,6 +13,8 @@ import java.util.List;
 public class JDBCReservationDAO implements ReservationDAO{
 
     private JDBCSpaceDAO spaceDAO;
+    private ReservationRequest request;
+    private Space space;
     private JdbcTemplate jdbcTemplate;
 
     public JDBCReservationDAO(DataSource dataSource) {
@@ -20,15 +22,11 @@ public class JDBCReservationDAO implements ReservationDAO{
     }
 
     @Override
-    public List<String> availableSpaces() {
+    public List<Reservation> availableSpaces() {
 
-        int daysReserved = 5;
-        String userDate = "2016-08-16";
-        LocalDate userStartDate = LocalDate.parse(userDate);
-        LocalDate userEndDate = userStartDate.plusDays(daysReserved);
 
-        List<String> availableSpaces = new ArrayList<>();
-       // List<String> openToAndOpenFrom = spaceDAO.retrieveVenueSpaceDetails();
+        List<Reservation> availableSpaces = new ArrayList<>();
+        // List<String> openToAndOpenFrom = spaceDAO.retrieveVenueSpaceDetails();
 
 
         String availableSpaceSql = "SELECT space.id, space.venue_id, space.name, space.is_accessible, space.open_from, space.open_to, space.daily_rate::money::numeric::float8, space.max_occupancy  FROM space " +
@@ -43,7 +41,7 @@ public class JDBCReservationDAO implements ReservationDAO{
                 "ORDER BY space.daily_rate DESC " +
                 "LIMIT 5 ";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(availableSpaceSql, 1, userStartDate, userEndDate, 100);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(availableSpaceSql, 1, request.getReservationDate(), request.getReservationDate().plusDays(request.getDaysReserved()), request.getNumberOfAttendees());
 
         while (results.next()) {
 
@@ -51,9 +49,8 @@ public class JDBCReservationDAO implements ReservationDAO{
             Reservation reservation = mapRowToReservation(results);
             String idToString = Long.toString(spaces.getId());
 
-            String availableSpace = idToString + "" + spaces.getName() + "" + spaces.getDailyRate() + "" + spaces.getMaxOccupancy() +
-                    "" + spaces.isAccessible() + "" + 1000;
-            availableSpaces.add(availableSpace);
+
+            availableSpaces.add(reservation);
 
         }
 
@@ -63,7 +60,7 @@ public class JDBCReservationDAO implements ReservationDAO{
 
 
 
-          }
+    }
 
     @Override
     public Reservation createReservation(Reservation newReservation) {
@@ -117,26 +114,26 @@ public class JDBCReservationDAO implements ReservationDAO{
         }
     }
 
-  //  private int retrieveNextSpaceId () {
+    //  private int retrieveNextSpaceId () {
     //    SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('space_id_seq')");
-   //     if (nextIdResult.next()) {
-         //   return nextIdResult.getInt(1);
-   //     } else {
-       //    throw new RuntimeException("Something went wrong while getting an id for the new Venue");
+    //     if (nextIdResult.next()) {
+    //   return nextIdResult.getInt(1);
+    //     } else {
+    //    throw new RuntimeException("Something went wrong while getting an id for the new Venue");
     //    }
-     //   return retrieveNextReservationId();
-    }
+    //   return retrieveNextReservationId();
+}
 
- //   public LocalDate retrieveDateFromSpaces() {
+//   public LocalDate retrieveDateFromSpaces() {
 
-    //    String sql = "SELECT open_to, open_from " + "FROM space " + "WHERE venue_id = 1;";
+//    String sql = "SELECT open_to, open_from " + "FROM space " + "WHERE venue_id = 1;";
 
-      //  SqlRowSet retrieveDateFromVenueSpace = jdbcTemplate.queryForRowSet(sql);
+//  SqlRowSet retrieveDateFromVenueSpace = jdbcTemplate.queryForRowSet(sql);
 
-      //;  return LocalDa;
+//;  return LocalDa;
 
 
-   // }
+// }
 
 
 

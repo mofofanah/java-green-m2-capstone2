@@ -1,5 +1,5 @@
 package com.techelevator;
-/*
+
 import com.techelevator.model.JDBCVenueDAO;
 import com.techelevator.model.Venue;
 import org.junit.Before;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
-/*
+
 public class JDBCVenueDAOTest extends DAOIntegrationTest {
     // dO a @before for test
     private JDBCVenueDAO dao;
@@ -39,7 +39,7 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
         //Arrange
         int nextId = retrieveNextVenueId();
 
-        List<String> allVenueNamesBeforeInsert = dao.retrieveAllVenues();
+        List<Venue> allVenueNamesBeforeInsert = dao.retrieveAllVenues();
         String venueSQL = "INSERT INTO venue (id, name, city_id, description) " +
                 "VALUES(?, ?, ?, ?)";
         jdbcTemplate.update(venueSQL, nextId, "XYZZY", 1, "Random Description For Test!");
@@ -50,32 +50,38 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
 
 
         //Act
-       // List<String> allVenueNames = dao.retrieveAllVenues(); //method under test
+        List<Venue> allVenueNames = dao.retrieveAllVenues(); //method under test
         //Assert
 
-       //Venue venue = dao.retrieveVenueDetails();
+        assertNotNull(allVenueNames);
+         if (allVenueNamesBeforeInsert.size() + 2 == allVenueNames.size()) {
+
+             assertTrue(true);
+         }
+         else {
+             assertTrue(false);
+         }
+
+         while (true) {
+             for (Venue venue : allVenueNames) {
+                 if (venue.getName().equalsIgnoreCase("XYZZY") || venue.getName().equalsIgnoreCase("ZZZZZ")) {
+                     assertTrue(true);
+                     break;
+                 }
+             }
+             break;
+         }
 
 
 
+   }
 
-       // assertNotNull(allVenueNames);
-       //  if (allVenueNamesBeforeInsert.size() + 2 == allVenueNames.size()) {
-
-       //      assertTrue(true);
-      //   }
-      //   else {
-    //         assertTrue(false);
-        // }
-//
-
-
- //   }
-
-  /*  @Test
+    @Test
 
     public void to_see_if_venue_details_are_retrieved () {
 
         int nextId = retrieveNextVenueId();
+
 
 
         String venueSQL = "INSERT INTO venue (id, name, city_id, description) " +
@@ -87,11 +93,14 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
         jdbcTemplate.update(venueSQL, nextId + 1, "ZZZZZ", 1, "Random Description For Test Part Two!");
 
 
+        Venue venue1 = dao.retrieveVenueDetailsById(nextId);
+        Venue venue2 = dao.retrieveVenueDetailsById(nextId + 1);
+
+        assertEquals("XYZZY", venue1.getName());
+        assertEquals("ZZZZZ", venue2.getName());
+
 
     }
-
-
-
 
        private int retrieveNextVenueId () {
            SqlRowSet nextIdResult = jdbcTemplate.queryForRowSet("SELECT nextval('venue_id_seq')");
@@ -104,4 +113,3 @@ public class JDBCVenueDAOTest extends DAOIntegrationTest {
 
 
    }
-*/

@@ -3,6 +3,8 @@ package com.techelevator.view;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.Array;
+import java.sql.SQLOutput;
 import java.util.*;
 
 import java.util.Scanner;
@@ -52,7 +54,7 @@ public class VenueMenu {
 
         System.out.println("\n*********** Venues ************\n");
 
-
+        System.out.println("Which Venue Would You Like To View?");
         if (venuesToPrint.isEmpty()) {
             System.out.println("No Results Found!");
             return;
@@ -63,11 +65,22 @@ public class VenueMenu {
             System.out.println(count++ + ") " + venue.getName());
         }
     }
+    public void printAvailableReservations(List<Reservation> reservationsToPrint) {
+
+        if (reservationsToPrint.isEmpty()) {
+            System.out.println("No Results Found!");
+            return;
+        }
+        for (Reservation reservation : reservationsToPrint) {
+            System.out.println(reservation.toString());
+        }
+
+    }
 
     public void printVenue(Venue venue) {
 
         if (venue == null) {
-            System.out.println("No results found... Pleast try again.");
+            System.out.println("No results found... Please try again.");
             return;
         }
 
@@ -92,11 +105,11 @@ public class VenueMenu {
         System.out.println("2) Search for Reservation");
         System.out.println("R. Return to previous menu\n");
 
-       System.out.println("Please select your choice (number only)");
+        System.out.println("Please select your choice (number only)");
 
 
-       String userChoice = retrieveIdNumberFromUser();
-       return userChoice;
+        String userChoice = scanner.nextLine();
+        return userChoice;
     }
 
 
@@ -118,15 +131,39 @@ public class VenueMenu {
 
         System.out.println("\n*********** *** *** ***  ************\n");
     }
+
+
+
     public String retrieveIdNumberFromUser() {
 
         System.out.println("\nPlease enter a venue number");
         return scanner.nextLine();
 
     }
+    public String userChoice(){
+        System.out.println("What is your choice ?");
+        return scanner.nextLine();
+
+    }
+    public String whatWouldYouLikeToDoNext() {
+        System.out.println("What would you like to do next?");
+        System.out.println("1) Reserve a Space");
+        System.out.println("R) Return to previous screen");
+        return scanner.nextLine();
+    }
+    public String askUserQuestionsToReserveVenueSpace() {
+        System.out.print("When do you need the space?");
+        String date = scanner.nextLine();
+        System.out.println("How many days will you need the space?");
+        int daysToReserve = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("How many people will be in attendance?");
+        int occupancyAmount = scanner.nextInt();
+        scanner.nextLine();
+
+        return date + ", " + daysToReserve + "," + occupancyAmount;
 
 
-
-
+    }
 }
 

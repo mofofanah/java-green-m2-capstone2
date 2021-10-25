@@ -7,6 +7,7 @@ import com.techelevator.view.VenueMenu;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ExcelsiorCLI {
@@ -16,6 +17,9 @@ public class ExcelsiorCLI {
 	private static final String QUIT_PROGRAM = "Q"; //when user presses "Q" the program will terminate.
 	private static final String QUIT_VENUE_SUB_MENU = "R";
 	private static final String VIEW_SPACES = "1";
+	private	static final String SEARCH_FOR_RESERVATION = "2";
+	private static final String RESERVE_A_SPACE = "1";
+
 
 
 
@@ -62,71 +66,84 @@ public class ExcelsiorCLI {
 				//pass venue list to menu method
 				menu.printListOfVenues(venueList);
 				//have that method return a choice
-				String venueId = menu.retrieveIdNumberFromUser();
+				//String venueId = menu.retrieveIdNumberFromUser();
 				//take option they give us and
-				Venue venueFromUserId= venueList.get(Integer.parseInt(venueId) - 1);
-				menu.printVenue(venueFromUserId);
+				Venue venueFromUserId = venueList.get(Integer.parseInt(choice) - 1);
+				//menu.printVenue(venueFromUserId);
 				//take printDetails method
 				//take them to submenu after this.
-				handleVenueSubmenu();
+
+				//menu.printVenue(venueFromUserId);
+
+				String venueChoice = menu.userChoice();
+				Venue venue = venueList.get(Integer.parseInt(venueChoice) - 1);
+				menu.printVenue(venue);
+
+				String subChoice = menu.printVenueSubMenu();
+
+				if (subChoice.equals(VIEW_SPACES)) {
+
+					List<Space> spacesList = spaceDAO.retrieveVenueSpaces(Integer.parseInt(subChoice));
+					menu.printListSpaces(spacesList);
+
+					handleVenueSubmenu();;
 
 
-			}
-			else if (Integer.parseInt(menu.retrieveIdNumberFromUser()) > 0) {
-
-				handleVenueSubmenu();
-
-			}
 
 
 
-			else if (choice.equals(QUIT_PROGRAM)) {
 
-				break;  // this allows us to exit the loop
+				} else if (choice.equals(QUIT_PROGRAM)) {
 
-			} else {
+					break;  // this allows us to exit the loop
 
-
-			}
+				} else {
 
 
-		}  // end of main while loop
+				}
 
 
-		//exit the program
-		System.out.println("Exiting the program.... Goodbye!");
+			}  // end of main while loop
 
+
+			//exit the program
+			System.out.println("Exiting the program.... Goodbye!");
+
+		}
 	}
-
 	private void handleVenueSubmenu() {
 
 		while (true) {
 
-			String subChoice = menu.printVenueSubMenu();
+			String spacesMenuChoice = menu.whatWouldYouLikeToDoNext();
 
-			if(subChoice.equals(VIEW_SPACES)) {
-				String venueId = menu.retrieveIdNumberFromUser();
+			if (spacesMenuChoice.contains("1")) {
+				String reserveASpace = menu.askUserQuestionsToReserveVenueSpace();
+				String[] split = reserveASpace.split(", ");
+				String date = split[0];
+				String daysReserved = split[1];
+				String peopleAttending = split[2];
+				ReservationRequest reservationRequest = new ReservationRequest();
+				LocalDate reservationDate = LocalDate.parse(date);
+				reservationRequest.setReservationDate(reservationDate);
+				reservationRequest.setDaysReserved(Integer.parseInt(daysReserved));
+				reservationRequest.setNumberOfAttendees(Integer.parseInt(peopleAttending));
+
+				List<Reservation> reservationsList = reservationDAO.availableSpaces();
+				menu.printAvailableReservations(reservationsList);
 
 
-				List<Venue> venueList = venueDAO.retrieveAllVenues();
-				Venue venueFromUserId= venueList.get(Integer.parseInt(venueId) - 1);
-				List<Space> spacesList = spaceDAO.retrieveVenueSpaces(Integer.parseInt(venueId));
-				menu.printListSpaces(spacesList);
 
-
-
-
-
-
-
+			} else if (spacesMenuChoice.equals(QUIT_VENUE_SUB_MENU)) {
+				break;
 			}
-
-
-
 
 
 		}
 
 
+	}
+	private String storeUserChoice(String choice) {
+		return choice;
 	}
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ReservationDAO {
 
-    List<String> availableSpaces();
+    List<Reservation> availableSpaces();
 
     public Reservation createReservation(Reservation newReservation);
 
